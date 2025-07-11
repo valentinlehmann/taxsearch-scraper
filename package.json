@@ -1,0 +1,20 @@
+{
+  "name": "scraper",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.11.1",
+    "@types/unzip-stream": "^0.3.4",
+    "cheerio": "^1.1.0",
+    "dayjs": "^1.11.13",
+    "meilisearch": "^0.51.0",
+    "unzip-stream": "^0.3.4"
+  }
+}
