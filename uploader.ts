@@ -36,11 +36,23 @@ await client.createIndex("bfh", {
 });
 const index = client.index("bfh");
 
+// Used by the frontend's filters, sorting, decision page and exact result counts
+await index.updateSettings({
+    filterableAttributes: ["docNumber", "docType", "body", "dateNum"],
+    sortableAttributes: ["dateNum"],
+    pagination: {maxTotalHits: 100000},
+});
+
+// Dates are stored as midnight in Berlin (UTC 22:00/23:00), so derive the calendar date there.
+// dateNum is YYYYMMDD as a number, e.g. 20201016, for range filters and sorting.
+const berlinDate = new Intl.DateTimeFormat("en-CA", {timeZone: "Europe/Berlin"});
+const docs = cases.map((c) => ({...c, dateNum: Number(berlinDate.format(new Date(c.date)).replaceAll("-", ""))}));
+
 const size = 1000;
 const batches = [];
 
-for (let i = 0; i < cases.length; i += size) {
-    const batch = cases.slice(i, i + size);
+for (let i = 0; i < docs.length; i += size) {
+    const batch = docs.slice(i, i + size);
     batches.push(batch);
 }
 
